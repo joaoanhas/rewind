@@ -18,6 +18,7 @@ A party game for the browser: one player records a word, the other hears it back
 - **Free play** for two players, swapping roles each round.
 - **Tournament** for 2 to 16 players: random draw, knockout bracket, and automatic byes when the number of players doesn't fill the bracket. Each match can be 1 game, best of 3 or best of 5.
 - Playback at **1x, 0.75x and 0.5x**.
+- Limit on how many times player 1's recording can be played backwards (3, 5 by default, 10 or unlimited), and a confirmation before playing it forwards, since that gives the word away.
 - **English and Portuguese** interface and word lists (PT / EN switch at the top).
 - Voice only: the app asks for the microphone, never the camera.
 - A single `index.html` with no backend or build step. The tournament is saved in the browser, so reloading the page keeps it.

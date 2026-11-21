@@ -142,6 +142,11 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
     <div class="seg" id="speed"><button type="button" data-r="1" aria-pressed="true">1x</button><button type="button" data-r="0.75" aria-pressed="false" data-i18n="x075">0,75x</button><button type="button" data-r="0.5" aria-pressed="false" data-i18n="x05">0,5x</button></div>
   </section>
 
+  <section class="card speed" data-i18n-aria="limit" aria-label="Ouvir ao contrário">
+    <span class="label" data-i18n="limit">Ouvir ao contrário</span>
+    <div class="seg" id="limit"><button type="button" data-l="3" aria-pressed="false">3x</button><button type="button" data-l="5" aria-pressed="true">5x</button><button type="button" data-l="10" aria-pressed="false">10x</button><button type="button" data-l="0" aria-pressed="false">∞</button></div>
+</section>
+
   <section class="card deck p1" id="deck1">
     <h2>1 · Grava a palavra</h2>
     <p data-i18n="deck1p">Diz a palavra em voz alta e clara. Máximo 10 segundos.</p>
@@ -157,7 +162,7 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
     </div>
     <div class="row">
       <button class="play" id="p1n" type="button" disabled>▶ Normal</button>
-      <button class="play big" id="p1r" type="button" disabled data-i18n="playR">◀ Ao contrário</button>
+      <button class="play big" id="p1r" type="button" disabled>◀ Ao contrário</button>
     </div>
     <div class="upload" id="up1wrap" hidden><span data-i18n="noMic">Sem acesso ao microfone.</span> <label for="up1" data-i18n="pickFile">Escolher um ficheiro de áudio</label><input type="file" id="up1" accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm"></div>
   </section>
@@ -210,7 +215,7 @@ pt:{scoreAria:"Pontuação",modesAria:"Modo de jogo",mFree:"Partida livre",mTour
  countNote:"De 2 a 16. Se o número não fechar o quadro, alguns jogadores passam diretamente à ronda seguinte.",eachGame:"Cada jogo",bo1:"1 partida",bo3:"Melhor de 3",bo5:"Melhor de 5",tStart:"Sortear e começar",tCont:"Próximo jogo",
  lead:"O jogador 1 diz a palavra. O jogador 2 ouve-a ao contrário, imita o que ouviu e, ao inverter a imitação, descobre-se a palavra.",
  btnNew:"Nova palavra",speed:"Velocidade",x075:"0,75x",x05:"0,5x",deck1p:"Diz a palavra em voz alta e clara. Máximo 10 segundos.",deck2p:"Ouve a gravação ao contrário (botão acima) e repete exatamente o som que ouviste.",
- playN:"▶ Normal",playR:"◀ Ao contrário",holdN:"🔒 Normal",confirmN:"Revela a palavra! Tocar de novo",noMic:"Sem acesso ao microfone.",pickFile:"Escolher um ficheiro de áudio",revealLabel:"3 · Qual era a palavra?",btnReveal:"Revelar",
+ playN:"▶ Normal",playR:"◀ Ao contrário",holdN:"🔒 Normal",confirmN:"Revela a palavra! Tocar de novo",limit:"Ouvir ao contrário",left:"{n} restantes",left1:"1 restante",none:"Esgotado",noMic:"Sem acesso ao microfone.",pickFile:"Escolher um ficheiro de áudio",revealLabel:"3 · Qual era a palavra?",btnReveal:"Revelar",
  show:"Mostrar",hide:"Esconder",p1:"J1",p2:"J2",recTitle:"1 · {r} grava a palavra",gueTitle:"2 · {g} imita o que ouviu",secret:"Palavra secreta · só {r} vê",guessNote:"{g} diz o palpite em voz alta. Depois revelem.",
  hitPlus:"Acertou (+1 {g})",miss:"Falhou",missPlus:"Falhou (+1 {r})",gameWon:"{w} ganha a partida",gameTie:"Empate, a partida repete-se",nextTurn:"Próximo turno · {b} grava",cont:"{m} · continuar",freeNext:"Próxima ronda · trocar de papéis",
  errAudio:"Não foi possível ler esse áudio. Tenta gravar outra vez.",errMic:"O microfone não está disponível aqui. Abre o jogo num site em https para gravar só com a voz, ou escolhe um ficheiro de áudio.",
@@ -223,7 +228,7 @@ en:{scoreAria:"Score",modesAria:"Game mode",mFree:"Free play",mTour:"Tournament"
  countNote:"From 2 to 16. If the number doesn't fill the bracket, some players go straight to the next round.",eachGame:"Each match",bo1:"1 game",bo3:"Best of 3",bo5:"Best of 5",tStart:"Draw and start",tCont:"Next match",
  lead:"Player 1 says the word. Player 2 hears it backwards, imitates the sound, and when the imitation is reversed the word comes out.",
  btnNew:"New word",speed:"Speed",x075:"0.75x",x05:"0.5x",deck1p:"Say the word out loud and clearly. 10 seconds max.",deck2p:"Play the recording backwards (button above) and repeat exactly the sound you heard.",
- playN:"▶ Normal",playR:"◀ Reversed",holdN:"🔒 Normal",confirmN:"Reveals the word! Tap again",noMic:"No microphone access.",pickFile:"Choose an audio file",revealLabel:"3 · What was the word?",btnReveal:"Reveal",
+ playN:"▶ Normal",playR:"◀ Reversed",holdN:"🔒 Normal",confirmN:"Reveals the word! Tap again",limit:"Reverse plays",left:"{n} left",left1:"1 left",none:"No plays left",noMic:"No microphone access.",pickFile:"Choose an audio file",revealLabel:"3 · What was the word?",btnReveal:"Reveal",
  show:"Show",hide:"Hide",p1:"P1",p2:"P2",recTitle:"1 · {r} records the word",gueTitle:"2 · {g} imitates the sound",secret:"Secret word · only {r} looks",guessNote:"{g} says their guess out loud. Then reveal.",
  hitPlus:"Got it (+1 {g})",miss:"Missed",missPlus:"Missed (+1 {r})",gameWon:"{w} wins the game",gameTie:"Tie, the game is replayed",nextTurn:"Next turn · {b} records",cont:"{m} · continue",freeNext:"Next round · swap roles",
  errAudio:"Couldn't read that audio. Try recording again.",errMic:"The microphone isn't available here. Open the game on an https site to record with your voice, or choose an audio file.",
@@ -310,10 +315,15 @@ function draw(deck,prog,rev){const cv=$("cv"+deck.n),g=cv.getContext("2d"),W=cv.
 
 // Decks
 let p1Locked=true,p1Timer=null;
-function setP1Lock(v){p1Locked=v;const b=$("p1n");b.classList.remove("confirm");b.classList.toggle("locked",v);b.textContent=v?t("holdN"):t("playN")}
+let playLimit=5,p1Plays=0;try{const l=localStorage.getItem("rewind-limit");if(l!==null&&!isNaN(+l))playLimit=+l}catch(e){}
+function updateP1R(){const b=$("p1r");const lim=playLimit&&p1Locked;const left=Math.max(0,playLimit-p1Plays);
+  b.textContent=!lim?t("playR"):left?t("playR")+" · "+(left===1?t("left1"):t("left",{n:left})):t("none");
+  b.disabled=!decks[0].rev||(lim&&left===0);
+  document.querySelectorAll("#limit button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.l===playLimit?"true":"false"))}
+function setP1Lock(v){p1Locked=v;const b=$("p1n");b.classList.remove("confirm");b.classList.toggle("locked",v);b.textContent=v?t("holdN"):t("playN");if(typeof decks!=="undefined")updateP1R()}
 const decks=[1,2].map(n=>({n,buf:null,rev:null,rec:null,live:null}));
 async function setBuffer(deck,arr){try{const b=await ac().decodeAudioData(arr);deck.buf=trim(b);deck.rev=reversed(deck.buf);deck.live=null;
-  $("p"+deck.n+"n").disabled=false;$("p"+deck.n+"r").disabled=false;$("t"+deck.n).textContent=fmt(deck.buf.duration);draw(deck,null);showErr("")}
+  $("p"+deck.n+"n").disabled=false;$("p"+deck.n+"r").disabled=false;if(deck.n===1){p1Plays=0;updateP1R()}$("t"+deck.n).textContent=fmt(deck.buf.duration);draw(deck,null);showErr("")}
   catch(e){showErr(t("errAudio"))}}
 const fmt=s=>s.toFixed(1).replace(".",t("dec"))+" "+t("sec");
 
@@ -353,11 +363,11 @@ decks.forEach(deck=>{
       if(!pn.classList.contains("confirm")){pn.classList.add("confirm");pn.textContent=t("confirmN");clearTimeout(p1Timer);p1Timer=setTimeout(()=>setP1Lock(p1Locked),3000);return}
       clearTimeout(p1Timer);setP1Lock(true)}
     deck.buf&&play(deck.buf,pn,deck)};
-  pr.onclick=()=>deck.rev&&play(deck.rev,pr,deck);
+  pr.onclick=()=>{if(!deck.rev)return;if(n===1&&playLimit&&p1Locked){if(p1Plays>=playLimit)return;p1Plays++;updateP1R()}play(deck.rev,pr,deck)};
   $("up"+n).onchange=async e=>{const f=e.target.files[0];if(f){ac();await setBuffer(deck,await f.arrayBuffer())}e.target.value=""};
 });
 
-function resetRound(){stop();setP1Lock(true);decks.forEach(d=>{stopRec(d);d.buf=d.rev=d.live=null;$("p"+d.n+"n").disabled=true;$("p"+d.n+"r").disabled=true;$("t"+d.n).textContent=fmt(0);draw(d,null)});newWord()}
+function resetRound(){stop();p1Plays=0;setP1Lock(true);decks.forEach(d=>{stopRec(d);d.buf=d.rev=d.live=null;$("p"+d.n+"n").disabled=true;$("p"+d.n+"r").disabled=true;$("t"+d.n).textContent=fmt(0);draw(d,null)});newWord()}
 let pendingNext=false;
 $("btnNext").onclick=()=>{if(mode==="free")swapped=!swapped;else{$("btnNext").hidden=true;pendingNext=false}
   renderRoles();resetRound();renderTour();window.scrollTo({top:0,behavior:"smooth"})};
@@ -432,7 +442,8 @@ function setLang(l){lang=l;WORDS=WORDS_BY[l];try{localStorage.setItem("rewind-la
   if(!$("tDone").hidden&&T&&!T.champion)$("tDoneTxt").textContent=doneLabel();
   setP1Lock(true);
   decks.forEach(d=>{$("t"+d.n).textContent=fmt(d.buf?d.buf.duration:0);$("rec"+d.n).setAttribute("aria-label",d.rec?t("stopRec"):t("recAria",{n:d.n}))});
-  newWord()}
+  resetRound()}
+document.querySelectorAll("#limit button").forEach(b=>b.onclick=()=>{playLimit=+b.dataset.l;try{localStorage.setItem("rewind-limit",playLimit)}catch(e){}updateP1R()});
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 load();renderNames();renderBest();renderRoles();renderTour();
 setLang(lang);
