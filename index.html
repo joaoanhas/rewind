@@ -66,6 +66,9 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
 .ok{background:var(--ok);color:#fff;border:0}
 .note{font-size:.85rem;color:var(--muted);margin:0}
 .err{color:var(--p1);font-size:.9rem;margin:0}
+.lang{display:flex;gap:2px;margin-left:auto}
+.lang button{min-height:32px;padding:4px 10px;font-size:.8rem;border-radius:999px}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .modes{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
 .modes button{flex:1;border:0;background:transparent;min-height:44px}
 .modes button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
@@ -87,7 +90,7 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
 .match.now{border-color:var(--p2);box-shadow:0 0 0 2px var(--p2)}
 .vs{font-family:var(--display);font-weight:800;font-size:1.5rem;text-align:center;margin:0;line-height:1.2}
 .vs .a{color:var(--p1)} .vs .b{color:var(--p2)} .vs small{display:block;font-family:var(--body);font-weight:500;font-size:.9rem;color:var(--muted)}
-.big{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,8vw,2.6rem);text-align:center;margin:0;line-height:1.1}
+.bigtxt{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,8vw,2.6rem);text-align:center;margin:0;line-height:1.1}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -95,17 +98,18 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
 <main>
   <header>
     <h1>Re<span class="rev">wind</span></h1>
-    <div class="score" aria-label="Pontuação"><span class="s1"><span id="n1">J1</span> <b id="sc1">0</b></span><span class="s2"><span id="n2">J2</span> <b id="sc2">0</b></span></div>
+    <div class="lang" role="group" aria-label="Language / Língua"><button type="button" data-lang="pt" aria-pressed="true">PT</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+    <div class="score" data-i18n-aria="scoreAria" aria-label="Pontuação"><span class="s1"><span id="n1">J1</span> <b id="sc1">0</b></span><span class="s2"><span id="n2">J2</span> <b id="sc2">0</b></span></div>
   </header>
-  <div class="modes" role="group" aria-label="Modo de jogo"><button type="button" id="mFree" aria-pressed="true">Partida livre</button><button type="button" id="mTour" aria-pressed="false">Torneio</button></div>
+  <div class="modes" role="group" data-i18n-aria="modesAria" aria-label="Modo de jogo"><button type="button" id="mFree" aria-pressed="true" data-i18n="mFree">Partida livre</button><button type="button" id="mTour" aria-pressed="false" data-i18n="mTour">Torneio</button></div>
 
   <section class="card" id="setup" hidden>
-    <div class="label">Torneio · quantos jogadores?</div>
-    <div class="count"><button type="button" id="cMinus" aria-label="Menos um jogador">−</button><output id="cVal">4</output><button type="button" id="cPlus" aria-label="Mais um jogador">+</button><span class="note">De 2 a 16. Se o número não fechar o quadro, alguns jogadores passam diretamente à ronda seguinte.</span></div>
+    <div class="label" data-i18n="setupLabel">Torneio · quantos jogadores?</div>
+    <div class="count"><button type="button" id="cMinus" data-i18n-aria="cMinus" aria-label="Menos um jogador">−</button><output id="cVal">4</output><button type="button" id="cPlus" data-i18n-aria="cPlus" aria-label="Mais um jogador">+</button><span class="note" data-i18n="countNote">De 2 a 16. Se o número não fechar o quadro, alguns jogadores passam diretamente à ronda seguinte.</span></div>
     <div class="names" id="names"></div>
-    <div class="card speed" style="padding:0;border:0"><span class="label">Cada jogo</span><div class="seg" id="bestOf"><button type="button" data-b="1" aria-pressed="false">1 partida</button><button type="button" data-b="3" aria-pressed="true">Melhor de 3</button><button type="button" data-b="5" aria-pressed="false">Melhor de 5</button></div></div>
+    <div class="card speed" style="padding:0;border:0"><span class="label" data-i18n="eachGame">Cada jogo</span><div class="seg" id="bestOf"><button type="button" data-b="1" aria-pressed="false" data-i18n="bo1">1 partida</button><button type="button" data-b="3" aria-pressed="true" data-i18n="bo3">Melhor de 3</button><button type="button" data-b="5" aria-pressed="false" data-i18n="bo5">Melhor de 5</button></div></div>
     <p class="note" id="bestNote"></p>
-    <button type="button" class="primary" id="tStart">Sortear e começar</button>
+    <button type="button" class="primary" id="tStart" data-i18n="tStart">Sortear e começar</button>
   </section>
 
   <section class="card" id="tour" hidden>
@@ -113,32 +117,32 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
     <div class="bracket" id="bracket"></div>
     <p class="vs" id="tVs"></p>
     <div id="tDone" hidden>
-      <p class="big" id="tDoneTxt"></p>
-      <div class="row" style="margin-top:12px"><button type="button" class="primary" id="tCont">Próximo jogo</button></div>
+      <p class="bigtxt" id="tDoneTxt"></p>
+      <div class="row" style="margin-top:12px"><button type="button" class="primary" id="tCont" data-i18n="tCont">Próximo jogo</button></div>
     </div>
     <button type="button" id="tReset">Novo torneio</button>
   </section>
 
   <div id="game" style="display:contents">
-  <p class="lead">O jogador 1 diz a palavra. O jogador 2 ouve-a ao contrário, imita o que ouviu e, ao inverter a imitação, descobre-se a palavra.</p>
+  <p class="lead" data-i18n="lead">O jogador 1 diz a palavra. O jogador 2 ouve-a ao contrário, imita o que ouviu e, ao inverter a imitação, descobre-se a palavra.</p>
 
   <section class="card" aria-labelledby="wl">
     <div class="label" id="wl">Palavra secreta · só o jogador 1 vê</div>
     <div class="word hidden" id="word">—</div>
     <div class="row">
       <button id="btnShow" type="button">Mostrar</button>
-      <button id="btnNew" type="button">Nova palavra</button>
+      <button id="btnNew" type="button" data-i18n="btnNew">Nova palavra</button>
     </div>
   </section>
 
-  <section class="card speed" aria-label="Velocidade">
-    <span class="label">Velocidade</span>
-    <div class="seg" id="speed"><button type="button" data-r="1" aria-pressed="true">1x</button><button type="button" data-r="0.75" aria-pressed="false">0,75x</button><button type="button" data-r="0.5" aria-pressed="false">0,5x</button></div>
+  <section class="card speed" data-i18n-aria="speed" aria-label="Velocidade">
+    <span class="label" data-i18n="speed">Velocidade</span>
+    <div class="seg" id="speed"><button type="button" data-r="1" aria-pressed="true">1x</button><button type="button" data-r="0.75" aria-pressed="false" data-i18n="x075">0,75x</button><button type="button" data-r="0.5" aria-pressed="false" data-i18n="x05">0,5x</button></div>
   </section>
 
   <section class="card deck p1" id="deck1">
     <h2>1 · Grava a palavra</h2>
-    <p>Diz a palavra em voz alta e clara. Máximo 10 segundos.</p>
+    <p data-i18n="deck1p">Diz a palavra em voz alta e clara. Máximo 10 segundos.</p>
     <div class="rec">
       <button class="recbtn" id="rec1" type="button" aria-label="Gravar jogador 1">
         <svg class="ring" viewBox="0 0 88 88"><circle cx="44" cy="44" r="41" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="4"/><circle class="prog" cx="44" cy="44" r="41" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="257.6" stroke-dashoffset="257.6"/></svg>
@@ -150,15 +154,15 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
       </div>
     </div>
     <div class="row">
-      <button class="play" id="p1n" type="button" disabled>▶ Normal</button>
-      <button class="play big" id="p1r" type="button" disabled>◀ Ao contrário</button>
+      <button class="play" id="p1n" type="button" disabled data-i18n="playN">▶ Normal</button>
+      <button class="play big" id="p1r" type="button" disabled data-i18n="playR">◀ Ao contrário</button>
     </div>
-    <div class="upload" id="up1wrap" hidden>Sem acesso ao microfone. <label for="up1">Escolher um ficheiro de áudio</label><input type="file" id="up1" accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm"></div>
+    <div class="upload" id="up1wrap" hidden><span data-i18n="noMic">Sem acesso ao microfone.</span> <label for="up1" data-i18n="pickFile">Escolher um ficheiro de áudio</label><input type="file" id="up1" accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm"></div>
   </section>
 
   <section class="card deck p2" id="deck2">
     <h2>2 · Imita o que ouviste</h2>
-    <p>Ouve a gravação ao contrário (botão acima) e repete exatamente o som que ouviste.</p>
+    <p data-i18n="deck2p">Ouve a gravação ao contrário (botão acima) e repete exatamente o som que ouviste.</p>
     <div class="rec">
       <button class="recbtn" id="rec2" type="button" aria-label="Gravar jogador 2">
         <svg class="ring" viewBox="0 0 88 88"><circle cx="44" cy="44" r="41" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="4"/><circle class="prog" cx="44" cy="44" r="41" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="257.6" stroke-dashoffset="257.6"/></svg>
@@ -170,18 +174,18 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
       </div>
     </div>
     <div class="row">
-      <button class="play" id="p2n" type="button" disabled>▶ Normal</button>
-      <button class="play big" id="p2r" type="button" disabled>◀ Ao contrário</button>
+      <button class="play" id="p2n" type="button" disabled data-i18n="playN">▶ Normal</button>
+      <button class="play big" id="p2r" type="button" disabled data-i18n="playR">◀ Ao contrário</button>
     </div>
-    <div class="upload" id="up2wrap" hidden>Sem acesso ao microfone. <label for="up2">Escolher um ficheiro de áudio</label><input type="file" id="up2" accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm"></div>
+    <div class="upload" id="up2wrap" hidden><span data-i18n="noMic">Sem acesso ao microfone.</span> <label for="up2" data-i18n="pickFile">Escolher um ficheiro de áudio</label><input type="file" id="up2" accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm"></div>
   </section>
 
   <section class="card reveal">
-    <div class="label">3 · Qual era a palavra?</div>
+    <div class="label" data-i18n="revealLabel">3 · Qual era a palavra?</div>
     <p class="note" id="guessNote">O jogador 2 diz o palpite em voz alta. Depois revelem.</p>
     <div class="word hidden" id="word2">—</div>
     <div class="row">
-      <button id="btnReveal" type="button">Revelar</button>
+      <button id="btnReveal" type="button" data-i18n="btnReveal">Revelar</button>
     </div>
     <div class="row" id="judge" hidden>
       <button class="ok" id="hit" type="button">Acertou (+1 J2)</button>
@@ -196,9 +200,46 @@ canvas{width:100%;height:56px;display:block;background:var(--soft);border-radius
 
 <script>
 (()=>{
-const WORDS=["bacalhau", "pastel de nata", "guarda-chuva", "elefante", "borboleta", "chocolate", "bicicleta", "frigorífico", "pequeno-almoço", "telemóvel", "autocarro", "girassol", "papagaio", "caracol", "sardinha", "abacaxi", "melancia", "computador", "banana", "saudade", "esparguete", "trotinete", "panqueca", "foguetão", "dinossauro", "limonada", "coruja", "tartaruga", "morango", "hipopótamo", "castanha", "francesinha", "rebuçado", "chupa-chupa", "palhaço", "mochila", "camelo", "pipoca", "relógio", "estrela", "tubarão", "cozinheiro", "helicóptero", "ornitorrinco", "supermercado", "televisão", "astronauta", "crocodilo", "espantalho", "paraquedas", "aspirador", "frigideira", "marmelada", "carrossel", "escorregadela", "caleidoscópio", "máquina de lavar", "bombeiro", "gelado de morango", "montanha-russa", "semáforo", "guarda-roupa", "escova de dentes", "ambulância", "papagaio-do-mar", "camaleão", "rinoceronte", "borracha", "calendário", "bailarina", "laranjada", "abóbora"];
+
 const MAX=10;
 const $=id=>document.getElementById(id);
+const I18N={
+pt:{scoreAria:"Pontuação",modesAria:"Modo de jogo",mFree:"Partida livre",mTour:"Torneio",setupLabel:"Torneio · quantos jogadores?",cMinus:"Menos um jogador",cPlus:"Mais um jogador",
+ countNote:"De 2 a 16. Se o número não fechar o quadro, alguns jogadores passam diretamente à ronda seguinte.",eachGame:"Cada jogo",bo1:"1 partida",bo3:"Melhor de 3",bo5:"Melhor de 5",tStart:"Sortear e começar",tCont:"Próximo jogo",
+ lead:"O jogador 1 diz a palavra. O jogador 2 ouve-a ao contrário, imita o que ouviu e, ao inverter a imitação, descobre-se a palavra.",
+ btnNew:"Nova palavra",speed:"Velocidade",x075:"0,75x",x05:"0,5x",deck1p:"Diz a palavra em voz alta e clara. Máximo 10 segundos.",deck2p:"Ouve a gravação ao contrário (botão acima) e repete exatamente o som que ouviste.",
+ playN:"▶ Normal",playR:"◀ Ao contrário",noMic:"Sem acesso ao microfone.",pickFile:"Escolher um ficheiro de áudio",revealLabel:"3 · Qual era a palavra?",btnReveal:"Revelar",
+ show:"Mostrar",hide:"Esconder",p1:"J1",p2:"J2",recTitle:"1 · {r} grava a palavra",gueTitle:"2 · {g} imita o que ouviu",secret:"Palavra secreta · só {r} vê",guessNote:"{g} diz o palpite em voz alta. Depois revelem.",
+ hitPlus:"Acertou (+1 {g})",miss:"Falhou",missPlus:"Falhou (+1 {r})",gameWon:"{w} ganha a partida",gameTie:"Empate, a partida repete-se",nextTurn:"Próximo turno · {b} grava",cont:"{m} · continuar",freeNext:"Próxima ronda · trocar de papéis",
+ errAudio:"Não foi possível ler esse áudio. Tenta gravar outra vez.",errMic:"O microfone não está disponível aqui. Abre o jogo num site em https para gravar só com a voz, ou escolhe um ficheiro de áudio.",
+ stopRec:"Parar gravação",recAria:"Gravar jogador {n}",bestOne:"Uma partida: cada jogador tenta adivinhar uma vez e passa quem acertar mais. Se empatarem, repete-se.",
+ bestN:"Em cada partida, cada jogador tenta adivinhar uma vez e ganha quem acertar mais (empate repete-se). Passa quem ganhar {k} partidas.",
+ final:"Final",semi:"Meias-finais",quarter:"Quartos de final",r16:"Oitavos de final",roundN:"Ronda {n}",tbd:"a definir",bye:"passa direto",tourOver:"Torneio terminado",bracket:"Quadro · {r}",
+ bestOfN:"Melhor de {n} · ",gameTurn:"Partida {g} · turno {t} de 2",hits:" · acertos {a}–{b}",champ:"{w} é o vencedor!",advances:"{w} passa à ronda seguinte",sure:"Tens a certeza? Toca outra vez",tReset:"Novo torneio",
+ player:"Jogador {n}",playerAria:"Nome do jogador {n}",sec:"s",dec:","},
+en:{scoreAria:"Score",modesAria:"Game mode",mFree:"Free play",mTour:"Tournament",setupLabel:"Tournament · how many players?",cMinus:"One player fewer",cPlus:"One more player",
+ countNote:"From 2 to 16. If the number doesn't fill the bracket, some players go straight to the next round.",eachGame:"Each match",bo1:"1 game",bo3:"Best of 3",bo5:"Best of 5",tStart:"Draw and start",tCont:"Next match",
+ lead:"Player 1 says the word. Player 2 hears it backwards, imitates the sound, and when the imitation is reversed the word comes out.",
+ btnNew:"New word",speed:"Speed",x075:"0.75x",x05:"0.5x",deck1p:"Say the word out loud and clearly. 10 seconds max.",deck2p:"Play the recording backwards (button above) and repeat exactly the sound you heard.",
+ playN:"▶ Normal",playR:"◀ Reversed",noMic:"No microphone access.",pickFile:"Choose an audio file",revealLabel:"3 · What was the word?",btnReveal:"Reveal",
+ show:"Show",hide:"Hide",p1:"P1",p2:"P2",recTitle:"1 · {r} records the word",gueTitle:"2 · {g} imitates the sound",secret:"Secret word · only {r} looks",guessNote:"{g} says their guess out loud. Then reveal.",
+ hitPlus:"Got it (+1 {g})",miss:"Missed",missPlus:"Missed (+1 {r})",gameWon:"{w} wins the game",gameTie:"Tie, the game is replayed",nextTurn:"Next turn · {b} records",cont:"{m} · continue",freeNext:"Next round · swap roles",
+ errAudio:"Couldn't read that audio. Try recording again.",errMic:"The microphone isn't available here. Open the game on an https site to record with your voice, or choose an audio file.",
+ stopRec:"Stop recording",recAria:"Record player {n}",bestOne:"One game: each player guesses once and whoever gets more right goes through. A tie is replayed.",
+ bestN:"In each game, each player guesses once and whoever gets more right wins it (a tie is replayed). First to win {k} games goes through.",
+ final:"Final",semi:"Semi-finals",quarter:"Quarter-finals",r16:"Round of 16",roundN:"Round {n}",tbd:"to be decided",bye:"bye",tourOver:"Tournament over",bracket:"Bracket · {r}",
+ bestOfN:"Best of {n} · ",gameTurn:"Game {g} · turn {t} of 2",hits:" · correct {a}–{b}",champ:"{w} is the winner!",advances:"{w} goes through to the next round",sure:"Are you sure? Tap again",tReset:"New tournament",
+ player:"Player {n}",playerAria:"Name of player {n}",sec:"s",dec:"."}};
+const WORDS_BY={pt:["bacalhau", "pastel de nata", "guarda-chuva", "elefante", "borboleta", "chocolate", "bicicleta", "frigorífico", "pequeno-almoço", "telemóvel", "autocarro", "girassol", "papagaio", "caracol", "sardinha", "abacaxi", "melancia", "computador", "banana", "saudade", "esparguete", "trotinete", "panqueca", "foguetão", "dinossauro", "limonada", "coruja", "tartaruga", "morango", "hipopótamo", "castanha", "francesinha", "rebuçado", "chupa-chupa", "palhaço", "mochila", "camelo", "pipoca", "relógio", "estrela", "tubarão", "cozinheiro", "helicóptero", "ornitorrinco", "supermercado", "televisão", "astronauta", "crocodilo", "espantalho", "paraquedas", "aspirador", "frigideira", "marmelada", "carrossel", "escorregadela", "caleidoscópio", "máquina de lavar", "bombeiro", "gelado de morango", "montanha-russa", "semáforo", "guarda-roupa", "escova de dentes", "ambulância", "papagaio-do-mar", "camaleão", "rinoceronte", "borracha", "calendário", "bailarina", "laranjada", "abóbora"],en:["helicopter", "platypus", "supermarket", "television", "astronaut", "crocodile", "scarecrow", "parachute", "vacuum cleaner", "frying pan", "marmalade", "merry-go-round", "kaleidoscope", "washing machine", "firefighter", "strawberry ice cream", "roller coaster", "traffic light", "wardrobe", "toothbrush", "ambulance", "chameleon", "rhinoceros", "calendar", "ballerina", "lemonade", "pumpkin", "umbrella", "elephant", "butterfly", "chocolate", "bicycle", "refrigerator", "breakfast", "mobile phone", "sunflower", "pineapple", "watermelon", "computer", "banana", "spaghetti", "pancake", "rocket ship", "dinosaur", "tortoise", "strawberry", "hippopotamus", "lollipop", "backpack", "popcorn", "octopus", "kangaroo", "hamburger", "avocado", "pirate ship", "snowman", "birthday cake", "alligator", "caterpillar", "grasshopper", "basketball", "motorcycle", "volcano", "hurricane", "spaceship", "dragonfly", "jellyfish", "telescope", "harmonica", "orchestra", "penguin", "cinnamon"]};
+let lang=(()=>{try{const l=localStorage.getItem("rewind-lang");if(l==="pt"||l==="en")return l}catch(e){}return /^pt/i.test(navigator.language||"pt")?"pt":"en"})();
+const t=(k,v)=>{let x=(I18N[lang]&&I18N[lang][k])??I18N.pt[k]??k;if(v)for(const n in v)x=x.split("{"+n+"}").join(v[n]);return x};
+let WORDS=WORDS_BY[lang];
+let nextLabel=()=>t("freeNext"),doneLabel=()=>"";
+function applyStatic(){document.documentElement.lang=lang==="pt"?"pt-PT":"en";
+  document.querySelectorAll("[data-i18n]").forEach(e=>e.textContent=t(e.dataset.i18n));
+  document.querySelectorAll("[data-i18n-aria]").forEach(e=>e.setAttribute("aria-label",t(e.dataset.i18nAria)));
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang?"true":"false"));
+  $("btnShow").textContent=$("word").classList.contains("hidden")?t("show"):t("hide");$("tReset").textContent=t("tReset");$("tReset").dataset.sure=""}
 let ctx=null; const ac=()=>ctx||(ctx=new (window.AudioContext||window.webkitAudioContext)());
 let current=null; // playing source
 let rate=1;
@@ -210,35 +251,34 @@ function showErr(m){const e=$("err");e.textContent=m;e.hidden=!m}
 // Words
 let word="";
 function newWord(){let w;do{w=WORDS[Math.floor(Math.random()*WORDS.length)]}while(w===word);word=w;$("word").textContent=w;$("word2").textContent=w;hideWord();$("word2").classList.add("hidden");$("judge").hidden=true;$("btnReveal").disabled=false}
-function hideWord(){$("word").classList.add("hidden");$("btnShow").textContent="Mostrar"}
-$("btnShow").onclick=()=>{const h=$("word").classList.toggle("hidden");$("btnShow").textContent=h?"Mostrar":"Esconder"};
+function hideWord(){$("word").classList.add("hidden");$("btnShow").textContent=t("show")}
+$("btnShow").onclick=()=>{const h=$("word").classList.toggle("hidden");$("btnShow").textContent=h?t("show"):t("hide")};
 $("btnNew").onclick=newWord;
 $("btnReveal").onclick=()=>{$("word2").classList.remove("hidden");$("judge").hidden=false;$("btnReveal").disabled=true};
 // ---- Modes & roles ----
 let mode="free";
-const freeNames=["J1","J2"];
+const freeNames=()=>[t("p1"),t("p2")];
 function roles(){ // [recorderName, guesserName, recorderIdx, guesserIdx] in the current pair
   if(mode==="tour"&&T&&T.cur){const m=T.cur;const r=m.turns%2;return [r?m.b:m.a,r?m.a:m.b,r,1-r]}
-  return swapped?[freeNames[1],freeNames[0],1,0]:[freeNames[0],freeNames[1],0,1]}
+  const f=freeNames();return swapped?[f[1],f[0],1,0]:[f[0],f[1],0,1]}
 function renderRoles(){const [rn,gn]=roles();
-  document.querySelector("#deck1 h2").textContent="1 · "+rn+" grava a palavra";
-  document.querySelector("#deck2 h2").textContent="2 · "+gn+" imita o que ouviu";
-  $("wl").textContent="Palavra secreta · só "+rn+" vê";
-  $("guessNote").textContent=gn+" diz o palpite em voz alta. Depois revelem.";
-  if(mode==="tour"){$("hit").textContent="Acertou (+1 "+gn+")";$("miss").textContent="Falhou";}
-  else{$("hit").textContent="Acertou (+1 "+gn+")";$("miss").textContent="Falhou (+1 "+rn+")"}
+  document.querySelector("#deck1 h2").textContent=t("recTitle",{r:rn});
+  document.querySelector("#deck2 h2").textContent=t("gueTitle",{g:gn});
+  $("wl").textContent=t("secret",{r:rn});
+  $("guessNote").textContent=t("guessNote",{g:gn});
+  $("hit").textContent=t("hitPlus",{g:gn});$("miss").textContent=mode==="tour"?t("miss"):t("missPlus",{r:rn});
   renderScore()}
 function renderScore(){
   if(mode==="tour"&&T&&T.cur){const w=T.cur.wins||[0,0];$("n1").textContent=T.cur.a;$("n2").textContent=T.cur.b;$("sc1").textContent=w[0];$("sc2").textContent=w[1]}
-  else{$("n1").textContent="J1";$("n2").textContent="J2";$("sc1").textContent=score[0];$("sc2").textContent=score[1]}}
+  else{$("n1").textContent=t("p1");$("n2").textContent=t("p2");$("sc1").textContent=score[0];$("sc2").textContent=score[1]}}
 function judge(hit){$("judge").hidden=true;const [,,ri,gi]=roles();
   if(mode==="tour"&&T&&T.cur){const m=T.cur;if(hit)m.hits[gi]++;m.turns++;
-    let msg;
+    let msg=()=>"";
     if(m.turns%2===0){m.wins=m.wins||[0,0];const need=Math.ceil((T.bestOf||1)/2);
-      if(m.hits[0]!==m.hits[1]){const x=m.hits[0]>m.hits[1]?0:1;m.wins[x]++;msg=(x?m.b:m.a)+" ganha a partida";m.game=(m.game||1)+1}else msg="Empate, a partida repete-se";
+      if(m.hits[0]!==m.hits[1]){const x=m.hits[0]>m.hits[1]?0:1;m.wins[x]++;const w=x?m.b:m.a;msg=()=>t("gameWon",{w});m.game=(m.game||1)+1}else msg=()=>t("gameTie");
       m.hits=[0,0];
       if(m.wins[0]>=need||m.wins[1]>=need){m.winner=m.wins[0]>m.wins[1]?m.a:m.b;advance();save();renderScore();showMatchDone(m);return}}
-    save();renderScore();renderTour();$("btnNext").hidden=false;$("btnNext").textContent=m.turns%2?"Próximo turno · "+m.b+" grava":msg+" · continuar";return}
+    save();renderScore();renderTour();pendingNext=true;$("btnNext").hidden=false;const odd=m.turns%2,b=m.b;nextLabel=()=>odd?t("nextTurn",{b}):t("cont",{m:msg()});$("btnNext").textContent=nextLabel();return}
   score[hit?gi:ri]++;renderScore()}
 $("hit").onclick=()=>judge(true);
 $("miss").onclick=()=>judge(false);
@@ -270,18 +310,18 @@ function draw(deck,prog,rev){const cv=$("cv"+deck.n),g=cv.getContext("2d"),W=cv.
 const decks=[1,2].map(n=>({n,buf:null,rev:null,rec:null,live:null}));
 async function setBuffer(deck,arr){try{const b=await ac().decodeAudioData(arr);deck.buf=trim(b);deck.rev=reversed(deck.buf);deck.live=null;
   $("p"+deck.n+"n").disabled=false;$("p"+deck.n+"r").disabled=false;$("t"+deck.n).textContent=fmt(deck.buf.duration);draw(deck,null);showErr("")}
-  catch(e){showErr("Não foi possível ler esse áudio. Tenta gravar outra vez.")}}
-const fmt=s=>s.toFixed(1).replace(".",",")+" s";
+  catch(e){showErr(t("errAudio"))}}
+const fmt=s=>s.toFixed(1).replace(".",t("dec"))+" "+t("sec");
 
 async function startRec(deck){
   const btn=$("rec"+deck.n);stop();
   let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}
-  catch(e){micOK=false;showFallback();showErr("O microfone não está disponível aqui. Abre o jogo pelo ficheiro index.html para gravar só com a voz, ou escolhe um ficheiro de áudio.");return}
+  catch(e){micOK=false;showFallback();showErr(t("errMic"));return}
   const c=ac();await c.resume();
   const an=c.createAnalyser();an.fftSize=2048;const srcN=c.createMediaStreamSource(stream);srcN.connect(an);
   const mr=new MediaRecorder(stream);const chunks=[];mr.ondataavailable=e=>e.data.size&&chunks.push(e.data);
   const hist=[];const tmp=new Float32Array(an.fftSize);const t0=performance.now();
-  deck.rec={mr,stream};btn.classList.add("on");btn.setAttribute("aria-label","Parar gravação");
+  deck.rec={mr,stream};btn.classList.add("on");btn.setAttribute("aria-label",t("stopRec"));
   const ring=btn.querySelector(".prog");
   const loop=()=>{if(!deck.rec||deck.rec.mr!==mr)return;const el=(performance.now()-t0)/1000;
     an.getFloatTimeDomainData(tmp);let m=0;for(const v of tmp)m=Math.max(m,Math.abs(v));hist.push(m);
@@ -296,7 +336,7 @@ function drawLive(deck,hist){const cv=$("cv"+deck.n),g=cv.getContext("2d"),W=cv.
   const col=getComputedStyle($("deck"+deck.n)).getPropertyValue("--c").trim();g.fillStyle=col;
   const bars=90,bw=W/bars;const start=Math.max(0,hist.length-bars);
   for(let i=start;i<hist.length;i++){const h=Math.max(3,Math.min(1,hist[i]*1.6)*(H-10));g.fillRect((i-start)*bw+1,(H-h)/2,bw-2,h)}}
-function stopRec(deck){if(!deck.rec)return;const {mr}=deck.rec;deck.rec=null;const btn=$("rec"+deck.n);btn.classList.remove("on");btn.setAttribute("aria-label","Gravar jogador "+deck.n);btn.querySelector(".prog").style.strokeDashoffset=257.6;if(mr.state!=="inactive")mr.stop()}
+function stopRec(deck){if(!deck.rec)return;const {mr}=deck.rec;deck.rec=null;const btn=$("rec"+deck.n);btn.classList.remove("on");btn.setAttribute("aria-label",t("recAria",{n:deck.n}));btn.querySelector(".prog").style.strokeDashoffset=257.6;if(mr.state!=="inactive")mr.stop()}
 
 function showFallback(){$("up1wrap").hidden=false;$("up2wrap").hidden=false}
 
@@ -311,7 +351,8 @@ decks.forEach(deck=>{
 });
 
 function resetRound(){stop();decks.forEach(d=>{stopRec(d);d.buf=d.rev=d.live=null;$("p"+d.n+"n").disabled=true;$("p"+d.n+"r").disabled=true;$("t"+d.n).textContent=fmt(0);draw(d,null)});newWord()}
-$("btnNext").onclick=()=>{if(mode==="free")swapped=!swapped;else $("btnNext").hidden=true;
+let pendingNext=false;
+$("btnNext").onclick=()=>{if(mode==="free")swapped=!swapped;else{$("btnNext").hidden=true;pendingNext=false}
   renderRoles();resetRound();renderTour();window.scrollTo({top:0,behavior:"smooth"})};
 
 // ---- Tournament ----
@@ -323,8 +364,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 const mk=(a,b)=>({a,b,winner:null,hits:[0,0],wins:[0,0],game:1,turns:0,bye:false});
 let bestOf=3;
 function renderBest(){document.querySelectorAll("#bestOf button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.b===bestOf?"true":"false"));
-  $("bestNote").textContent=bestOf===1?"Uma partida: cada jogador tenta adivinhar uma vez e passa quem acertar mais. Se empatarem, repete-se.":
-    "Em cada partida, cada jogador tenta adivinhar uma vez e ganha quem acertar mais (empate repete-se). Passa quem ganhar "+Math.ceil(bestOf/2)+" partidas."}
+  $("bestNote").textContent=bestOf===1?t("bestOne"):t("bestN",{k:Math.ceil(bestOf/2)})}
 document.querySelectorAll("#bestOf button").forEach(b=>b.onclick=()=>{bestOf=+b.dataset.b;renderBest()});
 function build(names){const p=shuffle(names.slice());let S=2;while(S<p.length)S*=2;const M=S/2,byes=S-p.length;
   // spread byes over the bracket: even slots first, then odd
@@ -336,7 +376,7 @@ function build(names){const p=shuffle(names.slice());let S=2;while(S<p.length)S*
 function advance(){for(let r=0;r<T.rounds.length-1;r++){T.rounds[r].forEach((m,i)=>{if(m.winner){const n=T.rounds[r+1][i>>1];if(i%2)n.b=m.winner;else n.a=m.winner}})}
   const f=T.rounds[T.rounds.length-1][0];if(f.winner)T.champion=f.winner}
 function findCur(){for(const r of T.rounds)for(const m of r)if(m.a&&m.b&&!m.winner)return m;return null}
-function roundName(r){const left=T.rounds.length-r;return left===1?"Final":left===2?"Meias-finais":left===3?"Quartos de final":left===4?"Oitavos de final":"Ronda "+(r+1)}
+function roundName(r){const left=T.rounds.length-r;return left===1?t("final"):left===2?t("semi"):left===3?t("quarter"):left===4?t("r16"):t("roundN",{n:r+1})}
 function esc(t){const d=document.createElement("span");d.textContent=t;return d.innerHTML}
 function renderTour(){const tour=mode==="tour";$("setup").hidden=!tour||!!T;$("tour").hidden=!tour||!T;
   const playing=!tour||(T&&T.cur&&$("tDone").hidden);$("game").style.display=playing?"contents":"none";
@@ -344,32 +384,34 @@ function renderTour(){const tour=mode==="tour";$("setup").hidden=!tour||!!T;$("t
   if(!tour||!T)return;
   $("bracket").innerHTML=T.rounds.map((r,ri)=>'<div class="round"><h3>'+roundName(ri)+'</h3>'+r.map(m=>{
     const cls=x=>!x?"tbd":m.winner?(m.winner===x?"w":"l"):"";
-    const row=(x,s)=>'<div class="'+cls(x)+'"><span>'+(x?esc(x):"a definir")+'</span>'+((m.turns||m.winner)&&x&&!m.bye?'<span>'+s+'</span>':'')+'</div>';
-    return '<div class="match'+(m===T.cur&&$("tDone").hidden?' now':'')+'">'+row(m.a,(m.wins||m.hits)[0])+(m.bye?'<div class="bye">passa direto</div>':row(m.b,(m.wins||m.hits)[1]))+'</div>'}).join("")+'</div>').join("");
+    const row=(x,s)=>'<div class="'+cls(x)+'"><span>'+(x?esc(x):t("tbd"))+'</span>'+((m.turns||m.winner)&&x&&!m.bye?'<span>'+s+'</span>':'')+'</div>';
+    return '<div class="match'+(m===T.cur&&$("tDone").hidden?' now':'')+'">'+row(m.a,(m.wins||m.hits)[0])+(m.bye?'<div class="bye">'+t("bye")+'</div>':row(m.b,(m.wins||m.hits)[1]))+'</div>'}).join("")+'</div>').join("");
   const ri=T.cur?T.rounds.findIndex(r=>r.includes(T.cur)):T.rounds.length-1;
-  $("tRound").textContent=T.champion?"Torneio terminado":"Quadro · "+roundName(ri);
-  $("tVs").innerHTML=T.cur&&$("tDone").hidden?'<span class="a">'+esc(T.cur.a)+'</span> vs <span class="b">'+esc(T.cur.b)+'</span><small>'+(T.bestOf>1?"Melhor de "+T.bestOf+" · ":"")+"Partida "+(T.cur.game||1)+" · turno "+(T.cur.turns%2+1)+" de 2"+(T.cur.turns%2?" · acertos "+T.cur.hits[0]+"–"+T.cur.hits[1]:"")+'</small>':"";
+  $("tRound").textContent=T.champion?t("tourOver"):t("bracket",{r:roundName(ri)});
+  $("tVs").innerHTML=T.cur&&$("tDone").hidden?'<span class="a">'+esc(T.cur.a)+'</span> vs <span class="b">'+esc(T.cur.b)+'</span><small>'+(T.bestOf>1?t("bestOfN",{n:T.bestOf}):"")+t("gameTurn",{g:T.cur.game||1,t:T.cur.turns%2+1})+(T.cur.turns%2?t("hits",{a:T.cur.hits[0],b:T.cur.hits[1]}):"")+'</small>':"";
   $("tVs").hidden=!$("tVs").innerHTML;
-  if(T.champion&&$("tDone").hidden){$("tDone").hidden=false;$("tDoneTxt").textContent=T.champion+" é o vencedor!";$("tCont").hidden=true}}
+  if(T.champion&&$("tDone").hidden){$("tDone").hidden=false;$("tDoneTxt").textContent=t("champ",{w:T.champion});$("tCont").hidden=true}}
 function showMatchDone(m){$("tDone").hidden=false;$("btnNext").hidden=true;
-  if(T.champion){$("tDoneTxt").textContent=T.champion+" é o vencedor!";$("tCont").hidden=true}
-  else{$("tDoneTxt").textContent=m.winner+" passa à ronda seguinte";$("tCont").hidden=false}
+  pendingNext=false;
+  if(T.champion){doneLabel=()=>t("champ",{w:T.champion});$("tCont").hidden=true}
+  else{const w=m.winner;doneLabel=()=>t("advances",{w});$("tCont").hidden=false}
+  $("tDoneTxt").textContent=doneLabel();
   renderTour();window.scrollTo({top:0,behavior:"smooth"})}
 function startMatch(){T.cur=findCur();$("tDone").hidden=true;$("btnNext").hidden=true;renderRoles();resetRound();renderTour()}
 $("tCont").onclick=startMatch;
-$("tReset").onclick=()=>{if($("tReset").dataset.sure!=="1"&&T&&!T.champion){$("tReset").dataset.sure="1";$("tReset").textContent="Tens a certeza? Toca outra vez";setTimeout(()=>{$("tReset").dataset.sure="";$("tReset").textContent="Novo torneio"},3000);return}
-  $("tReset").dataset.sure="";$("tReset").textContent="Novo torneio";T=null;save();$("tDone").hidden=true;renderNames();renderTour();renderRoles()};
+$("tReset").onclick=()=>{if($("tReset").dataset.sure!=="1"&&T&&!T.champion){$("tReset").dataset.sure="1";$("tReset").textContent=t("sure");setTimeout(()=>{$("tReset").dataset.sure="";$("tReset").textContent=t("tReset")},3000);return}
+  $("tReset").dataset.sure="";$("tReset").textContent=t("tReset");T=null;save();$("tDone").hidden=true;renderNames();renderTour();renderRoles()};
 function renderNames(){const box=$("names");const old=[...box.querySelectorAll("input")].map(i=>i.value);box.innerHTML="";
-  for(let i=0;i<count;i++){const inp=document.createElement("input");inp.id="pn"+i;inp.maxLength=16;inp.value=old[i]??("Jogador "+(i+1));inp.setAttribute("aria-label","Nome do jogador "+(i+1));box.appendChild(inp)}
+  for(let i=0;i<count;i++){const inp=document.createElement("input");inp.id="pn"+i;inp.maxLength=16;const def=t("player",{n:i+1});inp.value=(old[i]==null||/^(Jogador|Player) \d+$/.test(old[i]))?def:old[i];inp.setAttribute("aria-label",t("playerAria",{n:i+1}));box.appendChild(inp)}
   $("cVal").textContent=count;$("cMinus").disabled=count<=2;$("cPlus").disabled=count>=16}
 $("cMinus").onclick=()=>{count=Math.max(2,count-1);renderNames()};
 $("cPlus").onclick=()=>{count=Math.min(16,count+1);renderNames()};
-$("tStart").onclick=()=>{let names=[...$("names").querySelectorAll("input")].map((i,k)=>i.value.trim()||("Jogador "+(k+1)));
+$("tStart").onclick=()=>{let names=[...$("names").querySelectorAll("input")].map((i,k)=>i.value.trim()||t("player",{n:k+1}));
   // make names unique
   const seen={};names=names.map(n=>{if(seen[n]){seen[n]++;return n+" "+seen[n]}seen[n]=1;return n});
   build(names);T.bestOf=bestOf;save();startMatch()};
 function setMode(m){mode=m;$("mFree").setAttribute("aria-pressed",m==="free");$("mTour").setAttribute("aria-pressed",m==="tour");
-  $("btnNext").hidden=m==="tour";if(m==="free")$("btnNext").textContent="Próxima ronda · trocar de papéis";
+  $("btnNext").hidden=m==="tour"&&!pendingNext;if(m==="free"){nextLabel=()=>t("freeNext");$("btnNext").textContent=nextLabel()}
   $("tDone").hidden=true;stop();if(m==="tour"&&T&&T.champion){$("tDone").hidden=true}
   renderRoles();resetRound();renderTour()}
 $("mFree").onclick=()=>setMode("free");
@@ -377,8 +419,15 @@ $("mTour").onclick=()=>setMode("tour");
 
 document.querySelectorAll("#speed button").forEach(b=>b.onclick=()=>{rate=+b.dataset.r;document.querySelectorAll("#speed button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));stop()});
 if(!micOK)showFallback();
+function setLang(l){lang=l;WORDS=WORDS_BY[l];try{localStorage.setItem("rewind-lang",l)}catch(e){}
+  applyStatic();renderNames();renderBest();renderRoles();renderTour();
+  if(mode==="free")nextLabel=()=>t("freeNext");$("btnNext").textContent=nextLabel();
+  if(!$("tDone").hidden&&T&&!T.champion)$("tDoneTxt").textContent=doneLabel();
+  decks.forEach(d=>{$("t"+d.n).textContent=fmt(d.buf?d.buf.duration:0);$("rec"+d.n).setAttribute("aria-label",d.rec?t("stopRec"):t("recAria",{n:d.n}))});
+  newWord()}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 load();renderNames();renderBest();renderRoles();renderTour();
-newWord();
+setLang(lang);
 })();
 </script>
 </body></html>
