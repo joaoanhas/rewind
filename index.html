@@ -298,8 +298,16 @@ function trim(buf){ // cut silence at edges so the reverse starts right away
   if(b-a<buf.sampleRate*.2)return buf;
   const c=ac(),o=c.createBuffer(buf.numberOfChannels,b-a+1,buf.sampleRate);
   for(let ch=0;ch<buf.numberOfChannels;ch++)o.getChannelData(ch).set(buf.getChannelData(ch).subarray(a,b+1));return o}
+function normalize(buf){let peak=0;for(let ch=0;ch<buf.numberOfChannels;ch++){const d=buf.getChannelData(ch);for(let i=0;i<d.length;i++){const v=Math.abs(d[i]);if(v>peak)peak=v}}
+  if(peak<1e-4)return buf;const g=Math.min(0.98/peak,30);if(g<=1.02)return buf;
+  for(let ch=0;ch<buf.numberOfChannels;ch++){const d=buf.getChannelData(ch);for(let i=0;i<d.length;i++)d[i]*=g}return buf}
+let outNode=null;
+function out(){const c=ac();if(outNode)return outNode; // loudness chain: compressor + make-up gain
+  const comp=c.createDynamicsCompressor();comp.threshold.value=-24;comp.knee.value=12;comp.ratio.value=6;comp.attack.value=0.001;comp.release.value=0.2;
+  const g=c.createGain();g.gain.value=1.8;comp.connect(g);g.connect(c.destination);return outNode=comp}
+function session(type){try{if(navigator.audioSession)navigator.audioSession.type=type}catch(e){}}
 function stop(){if(current){try{current.src.stop()}catch(e){}current=null}}
-function play(buf,btn,deck){stop();const c=ac();c.resume();const src=c.createBufferSource();src.buffer=buf;src.playbackRate.value=rate;const dur=buf.duration/rate;src.connect(c.destination);src.start();current={src};
+function play(buf,btn,deck){stop();const c=ac();c.resume();const src=c.createBufferSource();src.buffer=buf;src.playbackRate.value=rate;const dur=buf.duration/rate;session("playback");src.connect(out());src.start();current={src};
   const t0=c.currentTime;const tick=()=>{if(!current||current.src!==src)return draw(deck,null);draw(deck,(c.currentTime-t0)/dur,btn.dataset.rev==="1");requestAnimationFrame(tick)};tick();
   src.onended=()=>{if(current&&current.src===src)current=null;draw(deck,null)}}
 
@@ -322,14 +330,14 @@ function updateP1R(){const b=$("p1r");const lim=playLimit&&p1Locked;const left=M
   document.querySelectorAll("#limit button").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.l===playLimit?"true":"false"))}
 function setP1Lock(v){p1Locked=v;const b=$("p1n");b.classList.remove("confirm");b.classList.toggle("locked",v);b.textContent=v?t("holdN"):t("playN");if(typeof decks!=="undefined")updateP1R()}
 const decks=[1,2].map(n=>({n,buf:null,rev:null,rec:null,live:null}));
-async function setBuffer(deck,arr){try{const b=await ac().decodeAudioData(arr);deck.buf=trim(b);deck.rev=reversed(deck.buf);deck.live=null;
+async function setBuffer(deck,arr){try{const b=await ac().decodeAudioData(arr);deck.buf=normalize(trim(b));deck.rev=reversed(deck.buf);deck.live=null;
   $("p"+deck.n+"n").disabled=false;$("p"+deck.n+"r").disabled=false;if(deck.n===1){p1Plays=0;updateP1R()}$("t"+deck.n).textContent=fmt(deck.buf.duration);draw(deck,null);showErr("")}
   catch(e){showErr(t("errAudio"))}}
 const fmt=s=>s.toFixed(1).replace(".",t("dec"))+" "+t("sec");
 
 async function startRec(deck){
   const btn=$("rec"+deck.n);stop();
-  let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}
+  let stream;try{session("play-and-record");stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}
   catch(e){micOK=false;showFallback();showErr(t("errMic"));return}
   const c=ac();await c.resume();
   const an=c.createAnalyser();an.fftSize=2048;const srcN=c.createMediaStreamSource(stream);srcN.connect(an);
